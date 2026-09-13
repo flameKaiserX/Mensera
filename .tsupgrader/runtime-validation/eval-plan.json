@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "name": "Mensera runtime smoke check",
+  "projectType": "webapp",
+  "assertions": [
+    {
+      "name": "production build",
+      "command": "npm",
+      "args": ["run", "build"],
+      "expected": "0"
+    }
+  ]
+}
