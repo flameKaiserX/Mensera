@@ -101,3 +101,74 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .animate-soft-pulse {
   animation: soft-pulse 3s infinite ease-in-out;
 }
+
+/* Re-map the existing utility palette while dark mode is active. */
+.dark-mode {
+  color-scheme: dark;
+  background: #17131d;
+  color: #f5eff8;
+}
+
+.dark-mode .glass-card,
+.dark-mode .glass-card-subtle {
+  background: rgba(36, 31, 43, 0.94);
+  border-color: rgba(77, 64, 86, 0.9);
+  box-shadow: 0 12px 34px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode [class*="bg-[#FAF7F2]"],
+.dark-mode [class*="bg-white"],
+.dark-mode [class*="bg-slate-50"],
+.dark-mode [class*="bg-slate-100"] {
+  background-color: #241f2b !important;
+}
+
+.dark-mode [class*="text-slate-800"],
+.dark-mode [class*="text-slate-900"] {
+  color: #f5eff8;
+}
+
+.dark-mode [class*="text-slate-700"],
+.dark-mode [class*="text-slate-600"] {
+  color: #d8cedf;
+}
+
+.dark-mode [class*="text-slate-500"],
+.dark-mode [class*="text-slate-400"] {
+  color: #a99caf;
+}
+
+.dark-mode [class*="text-violet-900"],
+.dark-mode [class*="text-violet-800"],
+.dark-mode [class*="text-amber-900"],
+.dark-mode [class*="text-amber-800"],
+.dark-mode [class*="text-rose-950"] {
+  color: #eadff0;
+}
+
+.dark-mode [class*="bg-violet-50"],
+.dark-mode [class*="bg-violet-100"],
+.dark-mode [class*="bg-amber-50"],
+.dark-mode [class*="bg-amber-100"],
+.dark-mode [class*="bg-rose-50"],
+.dark-mode [class*="bg-emerald-50"] {
+  background-color: #30263a;
+}
+
+.dark-mode [class*="border-slate-"],
+.dark-mode [class*="border-[#EDE9FE]"] {
+  border-color: #403649;
+}
+
+.dark-mode [class*="hover:bg-slate-100"]:hover,
+.dark-mode [class*="hover:bg-slate-200"]:hover {
+  background-color: #342b3d;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background-color: #241f2b;
+  color: #f5eff8;
+  border-color: #4d4056;
+}

@@ -31,12 +31,14 @@ interface AppContextType {
   todayLog: DayLog | undefined;
   todayRecommendation: AdaptiveRecommendationResult;
   selectedDate: string;
+  darkMode: boolean;
 
   // Actions
   setActiveTab: (tab: 'home' | 'calendar' | 'log' | 'learn' | 'profile') => void;
   openModal: (modalName: string, payload?: any) => void;
   closeModal: () => void;
   setSelectedDate: (dateStr: string) => void;
+  toggleDarkMode: () => void;
   updateUserProfile: (partial: Partial<UserProfile>) => void;
   saveDayLog: (log: Partial<DayLog> & { date: string }) => void;
   getLogForDate: (dateStr: string) => DayLog | undefined;
@@ -55,6 +57,7 @@ const STORAGE_KEYS = {
   LOGS: 'mensera_logs_v1',
   BADGES: 'mensera_badges_v1',
   NOTIFICATIONS: 'mensera_notifications_v1',
+  DARK_MODE: 'mensera_dark_mode_v1',
 };
 
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -130,6 +133,13 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [modalPayload, setModalPayload] = useState<any>(null);
   const [selectedDate, setSelectedDate] = useState<string>(() => formatDateToISO(new Date()));
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.DARK_MODE) === 'true';
+    } catch {
+      return false;
+    }
+  });
 
   // Sync to LocalStorage
   useEffect(() => {
@@ -155,6 +165,14 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       console.error(e);
     }
   }, [badges]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.DARK_MODE, String(darkMode));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [darkMode]);
 
   // Derived current cycle status
   const currentCycle = calculateCycleStatus(
@@ -190,6 +208,8 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setActiveModal(null);
     setModalPayload(null);
   };
+
+  const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
   const updateUserProfile = (partial: Partial<UserProfile>) => {
     setUserProfile((prev) => ({ ...prev, ...partial }));
@@ -337,10 +357,12 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         todayLog,
         todayRecommendation,
         selectedDate,
+        darkMode,
         setActiveTab,
         openModal,
         closeModal,
         setSelectedDate,
+        toggleDarkMode,
         updateUserProfile,
         saveDayLog,
         getLogForDate,

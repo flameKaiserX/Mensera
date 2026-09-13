@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, User } from 'lucide-react';
+import { Bell, Moon, Sun, User } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export const Header: React.FC = () => {
@@ -7,6 +7,8 @@ export const Header: React.FC = () => {
     notifications,
     openModal,
     userProfile,
+    darkMode,
+    toggleDarkMode,
   } = useApp();
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -32,6 +34,14 @@ export const Header: React.FC = () => {
 
       {/* Action Controls */}
       <div className="flex items-center gap-2">
+        <button
+          onClick={toggleDarkMode}
+          className="p-2 rounded-full bg-white/80 border border-slate-200/80 text-slate-700 hover:bg-slate-100 transition-colors shadow-xs"
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {darkMode ? <Sun size={17} /> : <Moon size={17} />}
+        </button>
         {/* Notifications Bell */}
         <button
           onClick={() => openModal('notifications')}
