@@ -15,10 +15,11 @@ import { FunFactsBrowser } from './components/learn/FunFactsBrowser';
 import { NutritionGuidanceModal } from './components/learn/NutritionGuidanceModal';
 import { MedicalSafetyModal } from './components/learn/MedicalSafetyModal';
 import { NotificationModal } from './components/notifications/NotificationModal';
+import { AccountGate } from './components/auth/AccountGate';
 import './App.css';
 
 const AppContent: React.FC = () => {
-  const { userProfile, activeTab, activeModal, closeModal } = useApp();
+  const { userProfile, activeTab, activeModal, closeModal, session, guestMode, authLoading } = useApp();
 
   return (
     <MobileFrame>
@@ -40,7 +41,8 @@ const AppContent: React.FC = () => {
       </div>
 
       {/* Onboarding Wizard (first launch or requested from profile) */}
-      {(!userProfile.hasCompletedOnboarding || !userProfile.name.trim() || activeModal === 'onboarding') && (
+      {!authLoading && !session && !guestMode && <AccountGate />}
+      {!authLoading && (session || guestMode) && (!userProfile.hasCompletedOnboarding || !userProfile.name.trim() || activeModal === 'onboarding') && (
         <OnboardingModal />
       )}
 

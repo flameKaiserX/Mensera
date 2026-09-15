@@ -39,6 +39,7 @@ interface AppContextType {
   todayRecommendation: AdaptiveRecommendationResult;
   selectedDate: string;
   darkMode: boolean;
+  guestMode: boolean;
   session: Session | null;
   authLoading: boolean;
   authError: string | null;
@@ -50,6 +51,7 @@ interface AppContextType {
   closeModal: () => void;
   setSelectedDate: (dateStr: string) => void;
   toggleDarkMode: () => void;
+  continueAsGuest: () => void;
   signIn: (email: string, password: string) => Promise<string | null>;
   signUp: (email: string, password: string) => Promise<string | null>;
   signInWithGoogle: () => Promise<string | null>;
@@ -72,6 +74,7 @@ const STORAGE_KEYS = {
   LOGS: 'mensera_logs_v1',
   NOTIFICATIONS: 'mensera_notifications_v1',
   DARK_MODE: 'mensera_dark_mode_v1',
+  GUEST_MODE: 'mensera_guest_mode_v1',
 };
 
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -143,6 +146,13 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       return false;
     }
   });
+  const [guestMode, setGuestMode] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.GUEST_MODE) === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -173,6 +183,14 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       console.error(e);
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.GUEST_MODE, String(guestMode));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [guestMode]);
 
   useEffect(() => {
     let mounted = true;
@@ -301,6 +319,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
+  const continueAsGuest = () => setGuestMode(true);
 
   const signIn = async (email: string, password: string) => {
     setAuthError(null);
@@ -472,6 +491,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         todayRecommendation,
         selectedDate,
         darkMode,
+        guestMode,
         session,
         authLoading,
         authError,
@@ -481,6 +501,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         closeModal,
         setSelectedDate,
         toggleDarkMode,
+        continueAsGuest,
         signIn,
         signUp,
         signInWithGoogle: handleGoogleSignIn,

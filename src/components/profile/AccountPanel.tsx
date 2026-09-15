@@ -88,19 +88,6 @@ export const AccountPanel: React.FC = () => {
         </p>
       </div>
 
-      <button
-        type="button"
-        onClick={handleGoogle}
-        disabled={submitting}
-        className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
-      >
-        <LogIn size={14} /> Continue with Google
-      </button>
-
-      <div className="flex items-center gap-2 text-[10px] text-slate-400 uppercase tracking-wider font-bold">
-        <span className="h-px bg-slate-200 flex-1" /> or email <span className="h-px bg-slate-200 flex-1" />
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-2.5">
         <label className="block">
           <span className="sr-only">Email address</span>
@@ -142,6 +129,20 @@ export const AccountPanel: React.FC = () => {
           {mode === 'sign-in' ? 'Sign in' : 'Create account'}
         </button>
       </form>
+
+      <div className="flex items-center gap-2 my-4 text-[10px] text-slate-400 uppercase tracking-wider font-bold">
+        <span className="h-px bg-slate-200 flex-1" /> or continue with <span className="h-px bg-slate-200 flex-1" />
+      </div>
+
+      <button
+        type="button"
+        onClick={handleGoogle}
+        disabled={submitting}
+        className="w-full py-2.5 px-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+      >
+        <span className="text-base font-extrabold leading-none">G</span>
+        Continue with Google
+      </button>
 
       <button
         type="button"
