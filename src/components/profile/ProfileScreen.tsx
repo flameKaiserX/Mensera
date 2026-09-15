@@ -13,14 +13,13 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import type { FitnessGoal } from '../../types';
-import { BadgesModal } from './BadgesModal';
 import { NotificationModal } from '../notifications/NotificationModal';
+import { AccountPanel } from './AccountPanel';
 
 export const ProfileScreen: React.FC = () => {
   const {
     userProfile,
     updateUserProfile,
-    badges,
     exportDataJSON,
     exportDataCSV,
     seedSampleData,
@@ -34,12 +33,9 @@ export const ProfileScreen: React.FC = () => {
   const [lastPeriodDate, setLastPeriodDate] = useState(userProfile.lastPeriodStartDate);
   const [isRegular, setIsRegular] = useState(userProfile.isRegular);
   const [fitnessGoal, setFitnessGoal] = useState<FitnessGoal>(userProfile.fitnessGoal);
-  const [showBadges, setShowBadges] = useState(false);
   const [showNotifModal, setShowNotifModal] = useState(false);
   const [savedSettings, setSavedSettings] = useState(false);
   const [showWipeConfirm, setShowWipeConfirm] = useState(false);
-
-  const unlockedBadges = badges.filter((b) => b.unlocked);
 
   const fitnessGoals: { id: FitnessGoal; label: string; icon: string }[] = [
     { id: 'strength', label: 'Build strength', icon: '🏋️' },
@@ -71,6 +67,8 @@ export const ProfileScreen: React.FC = () => {
 
   return (
     <div className="px-4 py-3 space-y-4 animate-fadeIn pb-8">
+      <AccountPanel />
+
       {/* Profile Header Card */}
       <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs">
         <div className="flex items-center gap-3.5">
@@ -88,26 +86,9 @@ export const ProfileScreen: React.FC = () => {
             </p>
             <div className="mt-1 flex items-center gap-1 text-[11px] text-emerald-700 font-semibold">
               <Lock size={11} className="text-emerald-600" />
-              <span>100% On-Device Private Storage</span>
+              <span>Private storage with optional cloud sync</span>
             </div>
           </div>
-        </div>
-
-        {/* Milestones & Badges Quick Shortcut */}
-        <div
-          onClick={() => setShowBadges(true)}
-          className="mt-4 p-3 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50/60 border border-amber-200/80 flex items-center justify-between cursor-pointer hover:border-amber-300 transition-all"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🏆</span>
-            <div>
-              <h4 className="text-xs font-bold text-slate-800">Milestones & Badges</h4>
-              <p className="text-[11px] text-slate-600 font-medium">
-                {unlockedBadges.length} of {badges.length} badges unlocked
-              </p>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-amber-800" />
         </div>
 
         {/* Notifications Shortcut */}
@@ -272,9 +253,8 @@ export const ProfileScreen: React.FC = () => {
         <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 text-xs leading-relaxed flex items-start gap-2">
           <Lock size={15} className="text-emerald-700 shrink-0 mt-0.5" />
           <p>
-            <span className="font-bold">Zero Cloud Tracking:</span> Your cycle data, daily symptoms,
-            and health notes remain strictly on this device. You retain 100% self-custody of your
-            health data.
+            <span className="font-bold">Your control:</span> Guest data stays on this device. When
+            you sign in, your profile and cycle logs sync to your private account.
           </p>
         </div>
 
@@ -356,7 +336,6 @@ export const ProfileScreen: React.FC = () => {
       </div>
 
       {/* Modals */}
-      {showBadges && <BadgesModal onClose={() => setShowBadges(false)} />}
       {showNotifModal && <NotificationModal onClose={() => setShowNotifModal(false)} />}
     </div>
   );

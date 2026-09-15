@@ -1,4 +1,4 @@
-import type { UserProfile, DayLog, Badge } from '../types';
+import type { UserProfile, DayLog } from '../types';
 import { formatDateToISO } from '../utils/cycleEngine';
 
 export const INITIAL_USER_PROFILE: UserProfile = {
@@ -22,54 +22,6 @@ export const INITIAL_USER_PROFILE: UserProfile = {
     mindsetBoosts: true,
   },
 };
-
-export const INITIAL_BADGES: Badge[] = [
-  {
-    id: 'badge-explorer',
-    title: 'Cycle Explorer',
-    emoji: '🌱',
-    category: 'Education',
-    description: 'Explored and learned all four distinct menstrual cycle phases.',
-    unlocked: true,
-    unlockedDate: '2026-08-15',
-  },
-  {
-    id: 'badge-consistency',
-    title: 'Consistency',
-    emoji: '🔥',
-    category: 'Habits',
-    description: 'Logged your cycle check-ins for 7 days in a row.',
-    unlocked: true,
-    unlockedDate: '2026-08-22',
-  },
-  {
-    id: 'badge-body-awareness',
-    title: 'Body Awareness',
-    emoji: '💜',
-    category: 'Attunement',
-    description: 'Logged daily energy and symptoms across an entire 28+ day cycle.',
-    unlocked: true,
-    unlockedDate: '2026-09-01',
-  },
-  {
-    id: 'badge-pattern',
-    title: 'Personal Pattern',
-    emoji: '🔍',
-    category: 'Insights',
-    description: 'Completed 3 cycles to unlock personalized cycle pattern insights.',
-    unlocked: true,
-    unlockedDate: '2026-09-08',
-  },
-  {
-    id: 'badge-recovery',
-    title: 'Recovery Champion',
-    emoji: '💧',
-    category: 'Wisdom',
-    description: 'Chose a restorative recovery day when your body asked for it.',
-    unlocked: true,
-    unlockedDate: '2026-08-28',
-  },
-];
 
 /**
  * Generate 3 full realistic historical cycles ending right up to today

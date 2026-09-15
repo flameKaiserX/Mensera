@@ -98,7 +98,7 @@ export const HomeScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* Today's 3 Key Guidance Badges: Energy, Workout Intensity, Recovery */}
+      {/* Today's 3 Key Guidance Metrics: Energy, Workout Intensity, Recovery */}
       <div className="grid grid-cols-3 gap-2.5">
         {/* Energy Card */}
         <div className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">

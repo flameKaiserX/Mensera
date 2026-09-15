@@ -135,16 +135,6 @@ export interface FunFact {
   icon: string;
 }
 
-export interface Badge {
-  id: string;
-  title: string;
-  emoji: string;
-  category: string;
-  description: string;
-  unlocked: boolean;
-  unlockedDate?: string;
-}
-
 export interface CyclePatternInsight {
   id: string;
   title: string;

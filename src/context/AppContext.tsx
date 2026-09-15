@@ -1,16 +1,15 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import type { Session } from '@supabase/supabase-js';
 import type {
   UserProfile,
   CurrentCycleStatus,
   DayLog,
-  Badge,
   AppNotification,
   AdaptiveInputs,
   AdaptiveRecommendationResult,
 } from '../types';
 import {
   INITIAL_USER_PROFILE,
-  INITIAL_BADGES,
   generateRealisticSampleLogs,
 } from '../data/mockData';
 import {
@@ -18,12 +17,20 @@ import {
   formatDateToISO,
   getAdaptiveWorkoutRecommendation,
 } from '../utils/cycleEngine';
+import {
+  getSession,
+  signInWithGoogle,
+  signInWithPassword,
+  signOut,
+  signUpWithPassword,
+  subscribeToAuthChanges,
+} from '../services/authService';
+import { loadCloudData, mergeLogs, saveCloudLogs, saveCloudProfile } from '../services/dataSyncService';
 
 interface AppContextType {
   userProfile: UserProfile;
   currentCycle: CurrentCycleStatus;
   logs: DayLog[];
-  badges: Badge[];
   notifications: AppNotification[];
   activeTab: 'home' | 'calendar' | 'log' | 'learn' | 'profile';
   activeModal: string | null;
@@ -32,6 +39,10 @@ interface AppContextType {
   todayRecommendation: AdaptiveRecommendationResult;
   selectedDate: string;
   darkMode: boolean;
+  session: Session | null;
+  authLoading: boolean;
+  authError: string | null;
+  syncStatus: 'local' | 'syncing' | 'synced' | 'error';
 
   // Actions
   setActiveTab: (tab: 'home' | 'calendar' | 'log' | 'learn' | 'profile') => void;
@@ -39,6 +50,10 @@ interface AppContextType {
   closeModal: () => void;
   setSelectedDate: (dateStr: string) => void;
   toggleDarkMode: () => void;
+  signIn: (email: string, password: string) => Promise<string | null>;
+  signUp: (email: string, password: string) => Promise<string | null>;
+  signInWithGoogle: () => Promise<string | null>;
+  signOut: () => Promise<string | null>;
   updateUserProfile: (partial: Partial<UserProfile>) => void;
   saveDayLog: (log: Partial<DayLog> & { date: string }) => void;
   getLogForDate: (dateStr: string) => DayLog | undefined;
@@ -55,7 +70,6 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 const STORAGE_KEYS = {
   PROFILE: 'mensera_profile_v2',
   LOGS: 'mensera_logs_v1',
-  BADGES: 'mensera_badges_v1',
   NOTIFICATIONS: 'mensera_notifications_v1',
   DARK_MODE: 'mensera_dark_mode_v1',
 };
@@ -84,18 +98,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return generateRealisticSampleLogs(INITIAL_USER_PROFILE.lastPeriodStartDate, INITIAL_USER_PROFILE.avgCycleLength);
   });
 
-  // 3. Badges State
-  const [badges, setBadges] = useState<Badge[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEYS.BADGES);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {
-      console.error(e);
-    }
-    return INITIAL_BADGES;
-  });
-
-  // 4. Notifications State
+  // 3. Notifications State
   const [notifications, setNotifications] = useState<AppNotification[]>(() => {
     const todayStr = formatDateToISO(new Date());
     return [
@@ -140,6 +143,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       return false;
     }
   });
+  const [session, setSession] = useState<Session | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [syncStatus, setSyncStatus] = useState<'local' | 'syncing' | 'synced' | 'error'>('local');
+  const hydratedUserId = useRef<string | null>(null);
 
   // Sync to LocalStorage
   useEffect(() => {
@@ -160,19 +168,102 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEYS.BADGES, JSON.stringify(badges));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [badges]);
-
-  useEffect(() => {
-    try {
       localStorage.setItem(STORAGE_KEYS.DARK_MODE, String(darkMode));
     } catch (e) {
       console.error(e);
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const hydrateSession = async () => {
+      const currentSession = await getSession();
+      if (mounted) {
+        setSession(currentSession);
+        setAuthLoading(false);
+      }
+    };
+
+    hydrateSession();
+    const unsubscribe = subscribeToAuthChanges((_event, nextSession) => {
+      if (!mounted) return;
+      setSession(nextSession);
+      setAuthLoading(false);
+    });
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!session?.user.id) {
+      hydratedUserId.current = null;
+      return;
+    }
+    if (hydratedUserId.current === session.user.id) return;
+
+    let cancelled = false;
+    const syncAccount = async () => {
+      setSyncStatus('syncing');
+      const cloudData = await loadCloudData(session.user.id);
+      if (cancelled) return;
+      if (cloudData.error) {
+        setAuthError(cloudData.error);
+        setSyncStatus('error');
+        return;
+      }
+
+      const mergedLogs = mergeLogs(logs, cloudData.logs);
+      setLogs(mergedLogs);
+      const profileToSave = cloudData.profile ? { ...cloudData.profile, ...userProfile } : userProfile;
+      setUserProfile(profileToSave);
+      const [profileResult, logsResult] = await Promise.all([
+        saveCloudProfile(session.user.id, profileToSave),
+        saveCloudLogs(session.user.id, mergedLogs),
+      ]);
+      if (cancelled) return;
+      if (profileResult.error || logsResult.error) {
+        setAuthError(profileResult.error || logsResult.error);
+        setSyncStatus('error');
+      } else {
+        hydratedUserId.current = session.user.id;
+        setAuthError(null);
+        setSyncStatus('synced');
+      }
+    };
+
+    syncAccount();
+    return () => {
+      cancelled = true;
+    };
+  }, [logs, session, userProfile]);
+
+  useEffect(() => {
+    if (!session?.user.id || hydratedUserId.current !== session.user.id) return;
+    saveCloudProfile(session.user.id, userProfile).then((result) => {
+      if (result.error) {
+        setAuthError(result.error);
+        setSyncStatus('error');
+      } else {
+        setSyncStatus('synced');
+      }
+    });
+  }, [userProfile, session]);
+
+  useEffect(() => {
+    if (!session?.user.id || hydratedUserId.current !== session.user.id) return;
+    saveCloudLogs(session.user.id, logs).then((result) => {
+      if (result.error) {
+        setAuthError(result.error);
+        setSyncStatus('error');
+      } else {
+        setSyncStatus('synced');
+      }
+    });
+  }, [logs, session]);
 
   // Derived current cycle status
   const currentCycle = calculateCycleStatus(
@@ -210,6 +301,33 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
+
+  const signIn = async (email: string, password: string) => {
+    setAuthError(null);
+    const result = await signInWithPassword(email, password);
+    if (result.error) setAuthError(result.error);
+    return result.error;
+  };
+
+  const signUp = async (email: string, password: string) => {
+    setAuthError(null);
+    const result = await signUpWithPassword(email, password);
+    if (result.error) setAuthError(result.error);
+    return result.error;
+  };
+
+  const handleGoogleSignIn = async () => {
+    setAuthError(null);
+    const result = await signInWithGoogle();
+    if (result.error) setAuthError(result.error);
+    return result.error;
+  };
+
+  const handleSignOut = async () => {
+    const result = await signOut();
+    if (result.error) setAuthError(result.error);
+    return result.error;
+  };
 
   const updateUserProfile = (partial: Partial<UserProfile>) => {
     setUserProfile((prev) => ({ ...prev, ...partial }));
@@ -266,7 +384,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       userProfile.avgCycleLength
     );
     setLogs(freshLogs);
-    setBadges(INITIAL_BADGES);
   };
 
   const clearAllData = () => {
@@ -276,7 +393,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     };
     setUserProfile(emptyProfile);
     setLogs([]);
-    setBadges(INITIAL_BADGES.map((b) => ({ ...b, unlocked: false })));
     localStorage.clear();
   };
 
@@ -289,7 +405,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       cycleSummary: currentCycle,
       totalLogsCount: logs.length,
       logs,
-      badges,
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -349,7 +464,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         userProfile,
         currentCycle,
         logs,
-        badges,
         notifications,
         activeTab,
         activeModal,
@@ -358,11 +472,19 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         todayRecommendation,
         selectedDate,
         darkMode,
+        session,
+        authLoading,
+        authError,
+        syncStatus,
         setActiveTab,
         openModal,
         closeModal,
         setSelectedDate,
         toggleDarkMode,
+        signIn,
+        signUp,
+        signInWithGoogle: handleGoogleSignIn,
+        signOut: handleSignOut,
         updateUserProfile,
         saveDayLog,
         getLogForDate,
