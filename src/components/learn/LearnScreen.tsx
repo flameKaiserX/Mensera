@@ -8,6 +8,7 @@ import {
   Apple,
   Lightbulb,
   Activity,
+  MessageCircle,
 } from 'lucide-react';
 import { EDUCATIONAL_ARTICLES } from '../../data/educationData';
 import type { EducationalArticle } from '../../types';
@@ -17,7 +18,7 @@ import { MedicalSafetyModal } from './MedicalSafetyModal';
 import { FunFactsBrowser } from './FunFactsBrowser';
 import { useApp } from '../../context/AppContext';
 
-export const LearnScreen: React.FC = () => {
+export const LearnScreen: React.FC<{ onOpenChat: () => void }> = ({ onOpenChat }) => {
   const { openModal } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -87,6 +88,21 @@ export const LearnScreen: React.FC = () => {
           ))}
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={onOpenChat}
+        className="w-full p-4 rounded-3xl bg-gradient-to-r from-violet-700 to-rose-600 text-white text-left shadow-md flex items-center justify-between gap-3"
+      >
+        <span className="flex items-center gap-3">
+          <span className="p-2 rounded-xl bg-white/15"><MessageCircle size={19} /></span>
+          <span>
+            <span className="block text-sm font-extrabold">Ask Mensera Guide</span>
+            <span className="block text-[11px] text-violet-100 mt-0.5">Questions about cycles, symptoms, movement, and more</span>
+          </span>
+        </span>
+        <ArrowRight size={17} />
+      </button>
 
       {/* 4 Interactive Feature Jump Cards */}
       <div className="grid grid-cols-2 gap-2.5">

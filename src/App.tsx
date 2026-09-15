@@ -16,10 +16,13 @@ import { NutritionGuidanceModal } from './components/learn/NutritionGuidanceModa
 import { MedicalSafetyModal } from './components/learn/MedicalSafetyModal';
 import { NotificationModal } from './components/notifications/NotificationModal';
 import { AccountGate } from './components/auth/AccountGate';
+import { ChatbotPanel } from './components/chat/ChatbotPanel';
+import { FloatingChatButton } from './components/chat/FloatingChatButton';
 import './App.css';
 
 const AppContent: React.FC = () => {
   const { userProfile, activeTab, activeModal, closeModal, session, guestMode, authLoading } = useApp();
+  const [chatOpen, setChatOpen] = React.useState(false);
 
   return (
     <MobileFrame>
@@ -32,13 +35,16 @@ const AppContent: React.FC = () => {
           {activeTab === 'home' && <HomeScreen />}
           {activeTab === 'calendar' && <CalendarScreen />}
           {activeTab === 'log' && <LogScreen />}
-          {activeTab === 'learn' && <LearnScreen />}
+          {activeTab === 'learn' && <LearnScreen onOpenChat={() => setChatOpen(true)} />}
           {activeTab === 'profile' && <ProfileScreen />}
         </main>
 
         {/* Sticky Mobile Bottom Navigation Bar */}
         <BottomNav />
       </div>
+
+      {(session || guestMode) && !activeModal && <FloatingChatButton onClick={() => setChatOpen(true)} />}
+      {chatOpen && <ChatbotPanel onClose={() => setChatOpen(false)} />}
 
       {/* Onboarding Wizard (first launch or requested from profile) */}
       {!authLoading && !session && !guestMode && <AccountGate />}
