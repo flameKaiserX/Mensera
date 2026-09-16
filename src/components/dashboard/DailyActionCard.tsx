@@ -13,7 +13,7 @@ import {
 import { useApp } from '../../context/AppContext';
 
 export const DailyActionCard: React.FC = () => {
-  const { currentCycle, todayRecommendation } = useApp();
+  const { currentCycle, todayRecommendation, darkMode } = useApp();
   const [completedItems, setCompletedItems] = useState<Record<string, boolean>>({});
 
   const toggleItem = (key: string) => {
@@ -79,18 +79,18 @@ export const DailyActionCard: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs my-4">
+    <div className={['rounded-3xl p-5 border shadow-xs my-4', darkMode ? 'bg-[#241f2b] border-[#403649]' : 'bg-white border-slate-200/80'].join(' ')}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div className={['flex items-center justify-between pb-3 border-b', darkMode ? 'border-[#403649]' : 'border-slate-100'].join(' ')}>
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-xl bg-violet-100 text-violet-700">
             <Compass size={18} />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-800 tracking-tight">
+            <h3 className={['text-base font-bold tracking-tight', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>
               What Should I Do Today?
             </h3>
-            <p className="text-[11px] text-slate-500 font-medium">
+            <p className={['text-[11px] font-medium', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
               Daily flexible guidance • {currentCycle.phaseDisplayName}
             </p>
           </div>
@@ -118,8 +118,12 @@ export const DailyActionCard: React.FC = () => {
               onClick={() => toggleItem(item.key)}
               className={`p-2.5 rounded-2xl border transition-all cursor-pointer flex items-start gap-2.5 ${
                 isDone
-                  ? 'bg-emerald-50/50 border-emerald-200/60 opacity-85'
-                  : 'bg-slate-50/60 border-slate-100 hover:bg-slate-50'
+                  ? darkMode
+                    ? 'bg-emerald-900/30 border-emerald-700/50 opacity-85'
+                    : 'bg-emerald-50/50 border-emerald-200/60 opacity-85'
+                  : darkMode
+                    ? 'bg-[#1d1823] border-[#403649] hover:bg-[#241f2b]'
+                    : 'bg-slate-50/60 border-slate-100 hover:bg-slate-50'
               }`}
             >
               <div className="mt-0.5">
@@ -132,9 +136,9 @@ export const DailyActionCard: React.FC = () => {
               <div className="flex-1">
                 <div className="flex items-center gap-1.5">
                   <Icon size={13} className={item.color} />
-                  <span className="text-xs font-bold text-slate-800">{item.label}</span>
+                  <span className={['text-xs font-bold', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>{item.label}</span>
                 </div>
-                <p className={`text-xs mt-0.5 leading-relaxed ${isDone ? 'text-slate-500 line-through' : 'text-slate-600'}`}>
+                <p className={['text-xs mt-0.5 leading-relaxed', isDone ? darkMode ? 'text-slate-400 line-through' : 'text-slate-500 line-through' : darkMode ? 'text-slate-300' : 'text-slate-600'].join(' ')}>
                   {item.text}
                 </p>
               </div>
@@ -144,14 +148,14 @@ export const DailyActionCard: React.FC = () => {
       </div>
 
       {/* Mindset Quote Box */}
-      <div className="mt-3.5 p-3 rounded-2xl bg-gradient-to-r from-violet-50 to-rose-50 border border-violet-100/80">
+      <div className={['mt-3.5 p-3 rounded-2xl border', darkMode ? 'bg-gradient-to-r from-[#2b2333] to-[#1f1d2a] border-[#4a3d56]' : 'bg-gradient-to-r from-violet-50 to-rose-50 border-violet-100/80'].join(' ')}>
         <div className="flex items-start gap-2">
           <Heart size={15} className="text-rose-500 shrink-0 mt-0.5" />
           <div>
-            <span className="text-[10px] font-bold text-violet-900 uppercase tracking-wider">
+            <span className={['text-[10px] font-bold uppercase tracking-wider', darkMode ? 'text-violet-200' : 'text-violet-900'].join(' ')}>
               Mindset For Today
             </span>
-            <p className="text-xs text-slate-700 italic mt-0.5 font-medium">
+            <p className={['text-xs italic mt-0.5 font-medium', darkMode ? 'text-slate-200' : 'text-slate-700'].join(' ')}>
               {action.mindset}
             </p>
           </div>
@@ -159,10 +163,10 @@ export const DailyActionCard: React.FC = () => {
       </div>
 
       {/* Remember Note */}
-      <div className="mt-2.5 flex items-start gap-2 px-1 text-[11px] text-slate-500">
-        <Info size={13} className="text-slate-400 shrink-0 mt-0.5" />
+      <div className={['mt-2.5 flex items-start gap-2 px-1 text-[11px]', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
+        <Info size={13} className={['shrink-0 mt-0.5', darkMode ? 'text-slate-400' : 'text-slate-400'].join(' ')} />
         <p className="leading-tight">
-          <span className="font-semibold text-slate-700">Remember:</span> {action.remember}
+          <span className={['font-semibold', darkMode ? 'text-slate-100' : 'text-slate-700'].join(' ')}>Remember:</span> {action.remember}
         </p>
       </div>
     </div>

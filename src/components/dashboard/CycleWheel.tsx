@@ -1,9 +1,9 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { Sparkles, Droplets } from 'lucide-react';
+import { Droplets } from 'lucide-react';
 
 export const CycleWheel: React.FC = () => {
-  const { currentCycle, openModal } = useApp();
+  const { currentCycle, openModal, darkMode } = useApp();
 
   const {
     currentDay,
@@ -56,7 +56,7 @@ export const CycleWheel: React.FC = () => {
             cy={center}
             r={radius}
             fill="transparent"
-            stroke="#F1EDE4"
+            stroke={darkMode ? '#3A3244' : '#F1EDE4'}
             strokeWidth={strokeWidth}
           />
 
@@ -141,13 +141,13 @@ export const CycleWheel: React.FC = () => {
           </p>
 
           <div className="flex items-baseline gap-1 mt-1">
-            <span className="text-xl font-extrabold text-slate-800 tracking-tight leading-none">
+            <span className={['text-xl font-extrabold tracking-tight leading-none', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>
               Day {currentDay}
             </span>
-            <span className="text-xs font-semibold text-slate-400">/ {cycleLength}</span>
+            <span className={['text-xs font-semibold', darkMode ? 'text-slate-400' : 'text-slate-400'].join(' ')}>/ {cycleLength}</span>
           </div>
 
-          <div className="mt-2 py-0.5 px-2.5 rounded-full bg-slate-100/90 border border-slate-200/80 text-[10px] font-semibold text-slate-600 flex items-center gap-1 shadow-2xs">
+          <div className={['mt-2 py-0.5 px-2.5 rounded-full border text-[10px] font-semibold flex items-center gap-1 shadow-2xs', darkMode ? 'bg-[#241f2b]/95 border-[#403649] text-slate-200' : 'bg-slate-100/90 border-slate-200/80 text-slate-600'].join(' ')}>
             <Droplets size={10} className="text-rose-500" />
             <span>
               {daysUntilNextPeriod === 0
@@ -158,10 +158,6 @@ export const CycleWheel: React.FC = () => {
         </div>
       </div>
 
-      <p className="text-[10px] text-slate-400 mt-1.5 flex items-center gap-1">
-        <Sparkles size={11} className="text-violet-500" />
-        <span>Tap the cycle wheel or phases above for deep dive guidance</span>
-      </p>
     </div>
   );
 };

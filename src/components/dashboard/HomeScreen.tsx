@@ -16,7 +16,7 @@ import { DailyActionCard } from './DailyActionCard';
 import { FUN_FACTS } from '../../data/funFactsData';
 
 export const HomeScreen: React.FC = () => {
-  const { currentCycle, todayRecommendation, openModal, setActiveTab } = useApp();
+  const { currentCycle, todayRecommendation, openModal, setActiveTab, darkMode } = useApp();
 
   // Pick a relevant fun fact (e.g. based on cycle day)
   const funFact = FUN_FACTS[(currentCycle.currentDay - 1) % FUN_FACTS.length] || FUN_FACTS[0];
@@ -24,7 +24,12 @@ export const HomeScreen: React.FC = () => {
   return (
     <div className="px-4 py-3 space-y-4 animate-fadeIn pb-6">
       {/* Top Welcome & Where Am I In My Cycle Banner */}
-      <div className="glass-card rounded-3xl p-5 border border-white/80 shadow-xs relative overflow-hidden">
+      <div
+        className={[
+          'glass-card rounded-3xl p-5 shadow-xs relative overflow-hidden',
+          darkMode ? 'border border-[#403649]' : 'border border-white/80',
+        ].join(' ')}
+      >
         {/* Subtle decorative background gradient */}
         <div
           className="absolute -right-12 -top-12 w-40 h-40 rounded-full blur-2xl pointer-events-none opacity-40"
@@ -32,7 +37,7 @@ export const HomeScreen: React.FC = () => {
         />
 
         <div className="flex items-center justify-between">
-          <span className="text-sm font-bold uppercase tracking-wider text-slate-500">
+          <span className={['text-sm font-bold uppercase tracking-wider', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
             Where am I in my cycle?
           </span>
           <span
@@ -51,7 +56,7 @@ export const HomeScreen: React.FC = () => {
         <CycleWheel />
 
         {/* Quick Phase Subtitle */}
-        <p className="text-xs text-center text-slate-600 font-medium px-4 mt-1">
+        <p className={['text-xs text-center font-medium px-4 mt-1', darkMode ? 'text-slate-300' : 'text-slate-600'].join(' ')}>
           {currentCycle.energyForecast}
         </p>
       </div>
@@ -101,13 +106,13 @@ export const HomeScreen: React.FC = () => {
       {/* Today's 3 Key Guidance Metrics: Energy, Workout Intensity, Recovery */}
       <div className="grid grid-cols-3 gap-2.5">
         {/* Energy Card */}
-        <div className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center gap-1 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+        <div className={['p-3 rounded-2xl border shadow-2xs flex flex-col justify-between', darkMode ? 'bg-[#241f2b] border-[#403649]' : 'bg-white border-slate-200/80'].join(' ')}>
+          <div className={['flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider', darkMode ? 'text-slate-400' : 'text-slate-400'].join(' ')}>
             <BatteryCharging size={12} className="text-amber-500" />
             <span>Energy</span>
           </div>
           <div className="my-1.5">
-            <span className="text-xs font-bold text-slate-800 leading-tight block">
+            <span className={['text-xs font-bold leading-tight block', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>
               {currentCycle.currentPhase === 'menstrual'
                 ? 'Gently Rebuilding'
                 : currentCycle.currentPhase === 'follicular'
@@ -119,7 +124,7 @@ export const HomeScreen: React.FC = () => {
                 : 'Steady Stamina'}
             </span>
           </div>
-          <span className="text-[10px] text-slate-500 font-medium line-clamp-2">
+          <span className={['text-[10px] font-medium line-clamp-2', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
             {todayRecommendation.type === 'push'
               ? 'Prime for effort'
               : todayRecommendation.type === 'recovery'
@@ -129,29 +134,29 @@ export const HomeScreen: React.FC = () => {
         </div>
 
         {/* Workout Card */}
-        <div className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center gap-1 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+        <div className={['p-3 rounded-2xl border shadow-2xs flex flex-col justify-between', darkMode ? 'bg-[#241f2b] border-[#403649]' : 'bg-white border-slate-200/80'].join(' ')}>
+          <div className={['flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider', darkMode ? 'text-slate-400' : 'text-slate-400'].join(' ')}>
             <Flame size={12} className="text-rose-500" />
             <span>Workout</span>
           </div>
           <div className="my-1.5">
-            <span className="text-xs font-bold text-slate-800 leading-tight block">
+            <span className={['text-xs font-bold leading-tight block', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>
               {todayRecommendation.title}
             </span>
           </div>
-          <span className="text-[10px] text-slate-500 font-medium line-clamp-2">
+          <span className={['text-[10px] font-medium line-clamp-2', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
             {todayRecommendation.targetIntensity}
           </span>
         </div>
 
         {/* Recovery Card */}
-        <div className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center gap-1 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+        <div className={['p-3 rounded-2xl border shadow-2xs flex flex-col justify-between', darkMode ? 'bg-[#241f2b] border-[#403649]' : 'bg-white border-slate-200/80'].join(' ')}>
+          <div className={['flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider', darkMode ? 'text-slate-400' : 'text-slate-400'].join(' ')}>
             <BedDouble size={12} className="text-violet-500" />
             <span>Recovery</span>
           </div>
           <div className="my-1.5">
-            <span className="text-xs font-bold text-slate-800 leading-tight block">
+            <span className={['text-xs font-bold leading-tight block', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>
               {currentCycle.currentPhase === 'menstrual'
                 ? 'Warmth & Sleep'
                 : currentCycle.currentPhase === 'follicular'
@@ -161,7 +166,7 @@ export const HomeScreen: React.FC = () => {
                 : 'Hydration & Cool Room'}
             </span>
           </div>
-          <span className="text-[10px] text-slate-500 font-medium line-clamp-2">
+          <span className={['text-[10px] font-medium line-clamp-2', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
             Prioritize sleep
           </span>
         </div>
@@ -171,27 +176,27 @@ export const HomeScreen: React.FC = () => {
       <DailyActionCard />
 
       {/* Fun Fact / Did You Know? Card */}
-      <div className="bg-gradient-to-br from-amber-50 to-orange-50/60 rounded-3xl p-4 border border-amber-200/70 shadow-2xs">
+      <div className={['rounded-3xl p-4 border shadow-2xs', darkMode ? 'bg-gradient-to-br from-[#2d2434] to-[#1d1a22] border-[#4a3d56]' : 'bg-gradient-to-br from-amber-50 to-orange-50/60 border-amber-200/70'].join(' ')}>
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-2xl bg-amber-200/70 text-amber-800 shrink-0">
+          <div className={['p-2 rounded-2xl shrink-0', darkMode ? 'bg-[#4a3d56] text-amber-200' : 'bg-amber-200/70 text-amber-800'].join(' ')}>
             <Lightbulb size={20} />
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900">
+              <span className={['text-[10px] font-bold uppercase tracking-wider', darkMode ? 'text-amber-200' : 'text-amber-900'].join(' ')}>
                 Did You Know? • {funFact.category}
               </span>
               <button
                 onClick={() => openModal('facts-browser')}
-                className="text-[11px] font-bold text-amber-800 hover:text-amber-950 flex items-center gap-0.5"
+                className={['text-[11px] font-bold flex items-center gap-0.5', darkMode ? 'text-amber-200 hover:text-amber-100' : 'text-amber-800 hover:text-amber-950'].join(' ')}
               >
                 <span>More</span>
                 <ArrowRight size={11} />
               </button>
             </div>
-            <h4 className="text-xs font-bold text-slate-800 mt-1">{funFact.title}</h4>
-            <p className="text-xs text-slate-600 mt-1 leading-relaxed">{funFact.fact}</p>
-            <p className="text-[10px] text-amber-800/80 font-medium mt-1.5 italic">
+            <h4 className={['text-xs font-bold mt-1', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>{funFact.title}</h4>
+            <p className={['text-xs mt-1 leading-relaxed', darkMode ? 'text-slate-300' : 'text-slate-600'].join(' ')}>{funFact.fact}</p>
+            <p className={['text-[10px] font-medium mt-1.5 italic', darkMode ? 'text-amber-200/80' : 'text-amber-800/80'].join(' ')}>
               Source: {funFact.source}
             </p>
           </div>
@@ -202,34 +207,34 @@ export const HomeScreen: React.FC = () => {
       <div className="grid grid-cols-2 gap-3">
         <button
           onClick={() => openModal('phases-explorer')}
-          className="p-3.5 rounded-2xl bg-white border border-slate-200/80 hover:bg-slate-50 text-left shadow-2xs transition-all group"
+          className={['p-3.5 rounded-2xl text-left shadow-2xs transition-all group', darkMode ? 'bg-[#241f2b] border border-[#403649] hover:bg-[#2d2434]' : 'bg-white border border-slate-200/80 hover:bg-slate-50'].join(' ')}
         >
           <div className="w-8 h-8 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
             <Activity size={18} />
           </div>
-          <h4 className="text-xs font-bold text-slate-800">4 Cycle Phases</h4>
-          <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">
+          <h4 className={['text-xs font-bold', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>4 Cycle Phases</h4>
+          <p className={['text-[10px] mt-0.5 leading-tight', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
             Explore biology, energy shifts & workout guides.
           </p>
         </button>
 
         <button
           onClick={() => openModal('nutrition-guide')}
-          className="p-3.5 rounded-2xl bg-white border border-slate-200/80 hover:bg-slate-50 text-left shadow-2xs transition-all group"
+          className={['p-3.5 rounded-2xl text-left shadow-2xs transition-all group', darkMode ? 'bg-[#241f2b] border border-[#403649] hover:bg-[#2d2434]' : 'bg-white border border-slate-200/80 hover:bg-slate-50'].join(' ')}
         >
           <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
             <Apple size={18} />
           </div>
-          <h4 className="text-xs font-bold text-slate-800">Phase Nutrition</h4>
-          <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">
+          <h4 className={['text-xs font-bold', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>Phase Nutrition</h4>
+          <p className={['text-[10px] mt-0.5 leading-tight', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
             Balanced meal ideas without restrictive diets.
           </p>
         </button>
       </div>
 
       {/* Mindset Anchor Message */}
-      <div className="p-3 rounded-2xl bg-white/70 border border-violet-100 text-center">
-        <p className="text-xs font-medium text-slate-700 italic flex items-center justify-center gap-1.5">
+      <div className={['p-3 rounded-2xl border text-center', darkMode ? 'bg-[#241f2b] border-[#403649]' : 'bg-white/70 border-violet-100'].join(' ')}>
+        <p className={['text-xs font-medium italic flex items-center justify-center gap-1.5', darkMode ? 'text-slate-200' : 'text-slate-700'].join(' ')}>
           <HeartHandshake size={14} className="text-rose-500 shrink-0" />
           <span>“Your body isn’t working against you. Learn how it works and work with it.”</span>
         </p>

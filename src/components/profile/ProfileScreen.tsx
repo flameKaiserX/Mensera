@@ -281,16 +281,6 @@ export const ProfileScreen: React.FC = () => {
         )}
       </div>
 
-      {/* Restart Onboarding link */}
-      <div className="text-center pt-2">
-        <button
-          onClick={() => openModal('onboarding')}
-          className="text-xs font-semibold text-slate-400 hover:text-slate-600 underline"
-        >
-          Re-open Welcome Onboarding Guide
-        </button>
-      </div>
-
     </div>
   );
 };

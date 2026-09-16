@@ -3,7 +3,7 @@ import { Home, Calendar, PlusCircle, BookOpen, User } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export const BottomNav: React.FC = () => {
-  const { activeTab, setActiveTab } = useApp();
+  const { activeTab, setActiveTab, darkMode } = useApp();
 
   interface NavItem {
     id: 'home' | 'calendar' | 'log' | 'learn' | 'profile';
@@ -21,7 +21,12 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="sticky bottom-0 z-30 bg-[#FFF9F5]/95 backdrop-blur-lg border-t border-[#F3C7B9]/80 px-2 py-1.5 pb-2.5 flex items-center justify-around">
+    <nav
+      className={[
+        'sticky bottom-0 z-30 backdrop-blur-lg border-t px-2 py-1.5 pb-2.5 flex items-center justify-around transition-colors duration-200',
+        darkMode ? 'bg-[#17131d]/95 border-[#403649]' : 'bg-[#FFF9F5]/95 border-[#F3C7B9]/80',
+      ].join(' ')}
+    >
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;
@@ -45,7 +50,9 @@ export const BottomNav: React.FC = () => {
               </div>
               <span
                 className={`text-[11px] font-semibold mt-1 ${
-                  isActive ? 'text-[#B4232A] font-bold' : 'text-slate-600'
+                  isActive
+                    ? darkMode ? 'text-[#F6A4A1] font-bold' : 'text-[#B4232A] font-bold'
+                    : darkMode ? 'text-slate-300' : 'text-slate-600'
                 }`}
               >
                 {item.label}
@@ -60,8 +67,8 @@ export const BottomNav: React.FC = () => {
             onClick={() => setActiveTab(item.id)}
             className={`flex flex-col items-center py-1 px-3 rounded-xl transition-all ${
               isActive
-                ? 'text-[#B4232A] font-semibold'
-                : 'text-slate-500 hover:text-slate-700 font-normal'
+                ? darkMode ? 'text-[#F6A4A1] font-semibold' : 'text-[#B4232A] font-semibold'
+                : darkMode ? 'text-slate-400 hover:text-slate-200 font-normal' : 'text-slate-500 hover:text-slate-700 font-normal'
             }`}
           >
             <div className="relative">
