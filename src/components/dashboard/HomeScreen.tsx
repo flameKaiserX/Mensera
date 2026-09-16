@@ -5,7 +5,6 @@ import {
   BedDouble,
   Lightbulb,
   ArrowRight,
-  Sparkles,
   HeartHandshake,
   Activity,
   Apple,
@@ -66,17 +65,7 @@ export const HomeScreen: React.FC = () => {
         <div className="absolute top-0 right-0 w-36 h-36 bg-[#F34B43]/20 rounded-full blur-2xl" />
 
         <div className="relative z-10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-300">
-              <Sparkles size={14} />
-              <span>Adaptive Engine</span>
-            </div>
-            <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/15">
-              Personalized
-            </span>
-          </div>
-
-          <h3 className="text-2xl font-extrabold mt-1 tracking-tight leading-tight">
+          <h3 className="text-2xl font-extrabold tracking-tight leading-tight">
             How are you feeling today?
           </h3>
           <p className="text-xs text-indigo-200 mt-1 leading-relaxed">

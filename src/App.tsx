@@ -26,12 +26,12 @@ const AppContent: React.FC = () => {
 
   return (
     <MobileFrame>
-      <div className={['flex flex-col min-h-full transition-colors duration-200', darkMode ? 'bg-[#17131d]' : 'bg-[#FFF9F5]'].join(' ')}>
+      <div className={['flex flex-col min-h-screen transition-colors duration-200', darkMode ? 'bg-[#17131d]' : 'bg-[#FFF9F5]'].join(' ')}>
         {/* Sticky Mobile Header */}
         <Header />
 
         {/* Tab View Container */}
-        <main className="flex-1 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden pb-2">
           {activeTab === 'home' && <HomeScreen />}
           {activeTab === 'calendar' && <CalendarScreen />}
           {activeTab === 'log' && <LogScreen />}

@@ -13,6 +13,7 @@ export const AccountPanel: React.FC = () => {
     signUp,
     signInWithGoogle,
     signOut,
+    darkMode,
   } = useApp();
   const [mode, setMode] = useState<'sign-in' | 'sign-up'>('sign-in');
   const [email, setEmail] = useState('');
@@ -46,27 +47,27 @@ export const AccountPanel: React.FC = () => {
   };
 
   if (authLoading) {
-    return <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs text-xs text-slate-500">Checking account session...</div>;
+    return <div className={['rounded-3xl p-5 border shadow-xs text-xs', darkMode ? 'bg-[#241f2b] border-[#403649] text-slate-300' : 'bg-white border-slate-200/80 text-slate-500'].join(' ')}>Checking account session...</div>;
   }
 
   if (session) {
     return (
-      <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
+      <div className={['rounded-3xl p-5 border shadow-xs space-y-3', darkMode ? 'bg-[#241f2b] border-[#403649]' : 'bg-white border-slate-200/80'].join(' ')}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-[#FBE0D8] border border-[#F3B8A8] text-[#B4232A] flex items-center justify-center text-base font-extrabold">
               {(userProfile.name.trim() || 'Friend').charAt(0).toUpperCase()}
             </div>
             <div>
-              <h3 className="text-sm font-extrabold text-slate-800">{userProfile.name.trim() || 'Friend'}</h3>
-              <p className="text-[11px] text-slate-500">{session.user.email}</p>
+              <h3 className={['text-sm font-extrabold', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>{userProfile.name.trim() || 'Friend'}</h3>
+              <p className={['text-[11px]', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>{session.user.email}</p>
             </div>
           </div>
           <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 flex items-center gap-1">
             <Cloud size={12} /> {syncStatus === 'synced' ? 'Synced' : syncStatus}
           </span>
         </div>
-        <p className="text-xs text-slate-600 leading-relaxed">
+        <p className={['text-xs leading-relaxed', darkMode ? 'text-slate-300' : 'text-slate-600'].join(' ')}>
           Your profile and cycle logs are synced to your private account. Local data was merged when you signed in.
         </p>
         {authError && <p className="text-xs text-rose-700 font-semibold">{authError}</p>}
@@ -74,7 +75,7 @@ export const AccountPanel: React.FC = () => {
           type="button"
           onClick={handleLogout}
           disabled={submitting}
-          className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 flex items-center justify-center gap-2 disabled:opacity-60"
+          className={['w-full py-2.5 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60', darkMode ? 'bg-[#1d1823] hover:bg-[#241f2b] border-[#403649] text-slate-100' : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'].join(' ')}
         >
           <LogOut size={14} /> Sign out
         </button>
@@ -83,10 +84,10 @@ export const AccountPanel: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
+    <div className={['rounded-3xl p-5 border shadow-xs space-y-3', darkMode ? 'bg-[#241f2b] border-[#403649]' : 'bg-white border-slate-200/80'].join(' ')}>
       <div>
-        <h3 className="text-sm font-extrabold text-slate-800">Save your Mensera data</h3>
-        <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+        <h3 className={['text-sm font-extrabold', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}>Save your Mensera data</h3>
+        <p className={['text-[11px] mt-1 leading-relaxed', darkMode ? 'text-slate-300' : 'text-slate-500'].join(' ')}>
           Use guest mode on this device, or create an account to sync your profile and cycle logs securely.
         </p>
       </div>
@@ -94,8 +95,8 @@ export const AccountPanel: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-2.5">
         <label className="block">
           <span className="sr-only">Email address</span>
-          <span className="flex items-center gap-2 px-3 rounded-xl bg-slate-50 border border-slate-200">
-            <Mail size={14} className="text-slate-400" />
+          <span className={['flex items-center gap-2 px-3 rounded-xl border', darkMode ? 'bg-[#1d1823] border-[#403649]' : 'bg-slate-50 border-slate-200'].join(' ')}>
+            <Mail size={14} className={darkMode ? 'text-slate-400' : 'text-slate-400'} />
             <input
               type="email"
               required
@@ -103,14 +104,14 @@ export const AccountPanel: React.FC = () => {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="Email address"
-              className="w-full py-2.5 bg-transparent text-xs text-slate-800 outline-none"
+              className={['w-full py-2.5 bg-transparent text-xs outline-none', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}
             />
           </span>
         </label>
         <label className="block">
           <span className="sr-only">Password</span>
-          <span className="flex items-center gap-2 px-3 rounded-xl bg-slate-50 border border-slate-200">
-            <ShieldCheck size={14} className="text-slate-400" />
+          <span className={['flex items-center gap-2 px-3 rounded-xl border', darkMode ? 'bg-[#1d1823] border-[#403649]' : 'bg-slate-50 border-slate-200'].join(' ')}>
+            <ShieldCheck size={14} className={darkMode ? 'text-slate-400' : 'text-slate-400'} />
             <input
               type="password"
               required
@@ -119,7 +120,7 @@ export const AccountPanel: React.FC = () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Password (at least 6 characters)"
-              className="w-full py-2.5 bg-transparent text-xs text-slate-800 outline-none"
+              className={['w-full py-2.5 bg-transparent text-xs outline-none', darkMode ? 'text-[#f5eff8]' : 'text-slate-800'].join(' ')}
             />
           </span>
         </label>
@@ -141,7 +142,7 @@ export const AccountPanel: React.FC = () => {
         type="button"
         onClick={handleGoogle}
         disabled={submitting}
-        className="w-full py-2.5 px-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+        className={['w-full py-2.5 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60', darkMode ? 'bg-[#1d1823] hover:bg-[#241f2b] border-[#403649] text-slate-100' : 'bg-white hover:bg-slate-50 border-slate-300 text-slate-700'].join(' ')}
       >
         <span className="text-base font-extrabold leading-none">G</span>
         Continue with Google
@@ -150,7 +151,7 @@ export const AccountPanel: React.FC = () => {
       <button
         type="button"
         onClick={() => setMode(mode === 'sign-in' ? 'sign-up' : 'sign-in')}
-        className="w-full text-[11px] font-semibold text-[#B4232A] hover:text-[#8F1D25]"
+        className={['w-full text-[11px] font-semibold', darkMode ? 'text-[#F6A4A1] hover:text-[#F2B2AE]' : 'text-[#B4232A] hover:text-[#8F1D25]'].join(' ')}
       >
         {mode === 'sign-in' ? 'Need an account? Create one' : 'Already have an account? Sign in'}
       </button>
