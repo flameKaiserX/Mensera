@@ -21,12 +21,12 @@ import { FloatingChatButton } from './components/chat/FloatingChatButton';
 import './App.css';
 
 const AppContent: React.FC = () => {
-  const { userProfile, activeTab, activeModal, closeModal, session, guestMode, authLoading } = useApp();
+  const { userProfile, activeTab, activeModal, closeModal, session, guestMode, authLoading, darkMode } = useApp();
   const [chatOpen, setChatOpen] = React.useState(false);
 
   return (
     <MobileFrame>
-      <div className="flex flex-col min-h-full bg-[#FFF9F5]">
+      <div className={['flex flex-col min-h-full transition-colors duration-200', darkMode ? 'bg-[#17131d]' : 'bg-[#FFF9F5]'].join(' ')}>
         {/* Sticky Mobile Header */}
         <Header />
 

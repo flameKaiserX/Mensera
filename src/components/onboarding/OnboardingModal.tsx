@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   Calendar,
   CheckCircle2,
-  Lock,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { MenseraLogo } from '../common/MenseraLogo';
@@ -172,30 +171,6 @@ export const OnboardingModal: React.FC = () => {
                 Cycle tracking, hormonal education & fitness guidance designed for women who move.
               </p>
 
-              <div className="my-6 p-4 rounded-2xl bg-white border border-violet-100 shadow-xs text-left">
-                <div className="flex items-start gap-3">
-                  <Sparkles size={20} className="text-violet-600 shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-xs font-bold text-violet-900 uppercase tracking-wider">
-                      Our Promise
-                    </h4>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                      “Your body is working differently today — adjust, don’t quit.” We never label
-                      you as weak. We guide you to work with your body’s natural rhythm.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Privacy Message */}
-              <div className="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200/80 text-left flex items-start gap-2.5">
-                <Lock size={16} className="text-emerald-700 shrink-0 mt-0.5" />
-                <p className="text-[11px] text-emerald-900 leading-snug">
-                  <span className="font-semibold">100% Private & On-Device:</span> Your menstrual
-                  health data is sensitive. Mensera stores your information locally on your device
-                  without cloud trackers or ad networks.
-                </p>
-              </div>
             </div>
           )}
 
@@ -247,9 +222,6 @@ export const OnboardingModal: React.FC = () => {
           {step === 3 && (
             <div className="py-2 animate-fadeIn">
               <h3 className="text-xl font-bold text-slate-800">Your Cycle Baseline</h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Averages help us personalize phase estimates. You can adjust this anytime.
-              </p>
 
               <div className="mt-6 space-y-6">
                 <div className="bg-white p-4 rounded-2xl border border-slate-200/80">
@@ -305,9 +277,6 @@ export const OnboardingModal: React.FC = () => {
           {step === 4 && (
             <div className="py-2 animate-fadeIn">
               <h3 className="text-xl font-bold text-slate-800">Last Period & Regularity</h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Helps us pinpoint exactly where you are in your cycle today.
-              </p>
 
               <div className="mt-5 space-y-4">
                 <div className="bg-white p-4 rounded-2xl border border-slate-200/80">
@@ -357,10 +326,7 @@ export const OnboardingModal: React.FC = () => {
           {/* STEP 5: Fitness Goal & Realistic Data Choice */}
           {step === 5 && (
             <div className="py-2 animate-fadeIn">
-              <h3 className="text-xl font-bold text-slate-800">Your Fitness Focus</h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Select your primary goal so we can tailor your daily training recommendations.
-              </p>
+              <h3 className="text-xl font-bold text-slate-800">Fitness goals</h3>
 
               <div className="mt-4 space-y-2 max-h-56 overflow-y-auto pr-1">
                 {fitnessGoals.map((g) => (
