@@ -1,6 +1,7 @@
 import React from 'react';
-import { Bell, Moon, Sun, User } from 'lucide-react';
+import { Bell, Moon, Sun } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { MenseraLogo } from './MenseraLogo';
 
 export const Header: React.FC = () => {
   const {
@@ -14,16 +15,12 @@ export const Header: React.FC = () => {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <header className="sticky top-0 z-30 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#EDE9FE]/60 px-4 py-3 flex items-center justify-between">
+    <header className="sticky top-0 z-30 bg-[#FFF9F5]/90 backdrop-blur-md border-b border-[#F3C7B9]/70 px-4 py-3 flex items-center justify-between">
       {/* Brand & Greeting */}
       <div className="flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 via-rose-500 to-amber-400 p-[1.5px] shadow-sm flex items-center justify-center">
-          <div className="w-full h-full bg-[#FAF7F2] rounded-full flex items-center justify-center">
-            <User size={15} className="text-violet-700" aria-hidden="true" />
-          </div>
-        </div>
+        <MenseraLogo size={40} className="drop-shadow-sm" />
         <div>
-          <h1 className="text-lg font-extrabold text-slate-800 tracking-tight leading-none">
+          <h1 className="text-lg font-extrabold text-[#B4232A] tracking-tight leading-none">
             MENSERA
           </h1>
           <p className="text-[11px] text-slate-500 font-medium">

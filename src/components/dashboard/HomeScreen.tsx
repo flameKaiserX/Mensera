@@ -57,8 +57,8 @@ export const HomeScreen: React.FC = () => {
       </div>
 
       {/* Adaptive Check-In Hero Card ("How are you feeling today?") */}
-      <div className="bg-gradient-to-br from-violet-900 to-indigo-950 text-white rounded-3xl p-5 shadow-md relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-36 h-36 bg-rose-500/20 rounded-full blur-2xl" />
+      <div className="bg-gradient-to-br from-[#8F1D25] to-[#5C8060] text-white rounded-3xl p-5 shadow-md relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-36 h-36 bg-[#F34B43]/20 rounded-full blur-2xl" />
 
         <div className="relative z-10">
           <div className="flex items-center justify-between">
@@ -82,7 +82,7 @@ export const HomeScreen: React.FC = () => {
           <div className="mt-4 flex items-center gap-2">
             <button
               onClick={() => openModal('adaptive-checkin')}
-              className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-rose-500 to-violet-500 text-white font-bold text-xs shadow-md hover:opacity-95 flex items-center gap-1.5"
+              className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#F34B43] to-[#7FA77B] text-white font-bold text-xs shadow-md hover:opacity-95 flex items-center gap-1.5"
             >
               <span>Quick Check-in (30s)</span>
               <ArrowRight size={14} />

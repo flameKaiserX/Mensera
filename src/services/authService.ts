@@ -3,6 +3,8 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase';
 
 export type AuthResult = {
   error: string | null;
+  session?: Session | null;
+  needsEmailConfirmation?: boolean;
 };
 
 const unavailableMessage = 'Cloud accounts are not configured yet. Guest mode is still available.';
@@ -26,15 +28,23 @@ export async function getSession(): Promise<Session | null> {
 export async function signUpWithPassword(email: string, password: string): Promise<AuthResult> {
   if (!supabase || !isSupabaseConfigured) return { error: unavailableMessage };
 
-  const { error } = await supabase.auth.signUp({ email, password });
-  return { error: error ? mapAuthError(error.message) : null };
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: window.location.origin },
+  });
+  return {
+    error: error ? mapAuthError(error.message) : null,
+    session: data.session,
+    needsEmailConfirmation: !error && !data.session,
+  };
 }
 
 export async function signInWithPassword(email: string, password: string): Promise<AuthResult> {
   if (!supabase || !isSupabaseConfigured) return { error: unavailableMessage };
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  return { error: error ? mapAuthError(error.message) : null };
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  return { error: error ? mapAuthError(error.message) : null, session: data.session };
 }
 
 export async function signInWithGoogle(): Promise<AuthResult> {

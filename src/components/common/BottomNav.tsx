@@ -21,7 +21,7 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="sticky bottom-0 z-30 bg-[#FAF7F2]/95 backdrop-blur-lg border-t border-[#EDE9FE]/80 px-2 py-1.5 pb-2.5 flex items-center justify-around">
+    <nav className="sticky bottom-0 z-30 bg-[#FFF9F5]/95 backdrop-blur-lg border-t border-[#F3C7B9]/80 px-2 py-1.5 pb-2.5 flex items-center justify-around">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;
@@ -37,15 +37,15 @@ export const BottomNav: React.FC = () => {
               <div
                 className={`w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all ${
                   isActive
-                    ? 'bg-gradient-to-tr from-rose-500 to-violet-600 text-white scale-105 shadow-rose-200'
-                    : 'bg-gradient-to-tr from-violet-600 to-rose-500 text-white hover:scale-105'
+                    ? 'bg-gradient-to-tr from-[#F34B43] to-[#7FA77B] text-white scale-105 shadow-rose-200'
+                    : 'bg-gradient-to-tr from-[#B4232A] to-[#F34B43] text-white hover:scale-105'
                 }`}
               >
                 <PlusCircle size={24} className="stroke-[2.2]" />
               </div>
               <span
                 className={`text-[11px] font-semibold mt-1 ${
-                  isActive ? 'text-violet-900 font-bold' : 'text-slate-600'
+                  isActive ? 'text-[#B4232A] font-bold' : 'text-slate-600'
                 }`}
               >
                 {item.label}
@@ -60,7 +60,7 @@ export const BottomNav: React.FC = () => {
             onClick={() => setActiveTab(item.id)}
             className={`flex flex-col items-center py-1 px-3 rounded-xl transition-all ${
               isActive
-                ? 'text-violet-700 font-semibold'
+                ? 'text-[#B4232A] font-semibold'
                 : 'text-slate-500 hover:text-slate-700 font-normal'
             }`}
           >
@@ -72,7 +72,7 @@ export const BottomNav: React.FC = () => {
                 }`}
               />
               {isActive && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-violet-600 rounded-full" />
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#F34B43] rounded-full" />
               )}
             </div>
             <span className="text-[11px] mt-1 tracking-tight">{item.label}</span>

@@ -324,14 +324,25 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const signIn = async (email: string, password: string) => {
     setAuthError(null);
     const result = await signInWithPassword(email, password);
-    if (result.error) setAuthError(result.error);
+    if (result.error) {
+      setAuthError(result.error);
+    } else {
+      setGuestMode(false);
+      if (result.session) setSession(result.session);
+    }
     return result.error;
   };
 
   const signUp = async (email: string, password: string) => {
     setAuthError(null);
     const result = await signUpWithPassword(email, password);
-    if (result.error) setAuthError(result.error);
+    if (result.error) {
+      setAuthError(result.error);
+    } else {
+      setGuestMode(false);
+      if (result.session) setSession(result.session);
+      else setAuthError('Account created. Check your email to confirm the account, then sign in here.');
+    }
     return result.error;
   };
 

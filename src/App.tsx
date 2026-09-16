@@ -26,7 +26,7 @@ const AppContent: React.FC = () => {
 
   return (
     <MobileFrame>
-      <div className="flex flex-col min-h-full bg-[#FAF7F2]">
+      <div className="flex flex-col min-h-full bg-[#FFF9F5]">
         {/* Sticky Mobile Header */}
         <Header />
 

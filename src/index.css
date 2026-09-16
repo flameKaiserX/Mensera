@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    --bg-cream: #FAF7F2;
+    --bg-cream: #FFF9F5;
     --bg-card: #FFFFFF;
     --text-primary: #23192D;
     --text-secondary: #6B5E78;
@@ -26,14 +26,14 @@
     --phase-luteal-border: #C4B5FD;
 
     /* Brand accents */
-    --brand-purple: #4C1D95;
-    --brand-coral: #F43F5E;
-    --brand-lavender: #8B5CF6;
-    --brand-mint: #10B981;
+    --brand-coral: #F34B43;
+    --brand-coral-dark: #B4232A;
+    --brand-sage: #7FA77B;
+    --brand-sage-light: #E8F1E4;
   }
 
   body {
-    background: linear-gradient(180deg, #fbf8f4 0%, #f4efe8 100%);
+    background: linear-gradient(180deg, #FFF9F5 0%, #F3EEE7 100%);
     color: #23192D;
     font-family: 'Avenir Next', 'Trebuchet MS', 'Segoe UI', sans-serif;
     font-size: 15px;

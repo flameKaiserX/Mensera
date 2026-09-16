@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Heart,
   ArrowRight,
   Sparkles,
   ChevronLeft,
@@ -9,6 +8,7 @@ import {
   Lock,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { MenseraLogo } from '../common/MenseraLogo';
 import { useApp } from '../../context/AppContext';
 import type { FitnessGoal } from '../../types';
 import { formatDateToISO } from '../../utils/cycleEngine';
@@ -31,6 +31,7 @@ export const OnboardingModal: React.FC = () => {
     userProfile.fitnessGoal || 'strength'
   );
   const [loadSampleData, setLoadSampleData] = useState<boolean>(true);
+  const [nameError, setNameError] = useState(false);
 
   const totalSteps = 5;
 
@@ -108,6 +109,16 @@ export const OnboardingModal: React.FC = () => {
     closeModal();
   };
 
+  const handleContinue = () => {
+    if (step === 2 && !name.trim()) {
+      setNameError(true);
+      return;
+    }
+
+    setNameError(false);
+    setStep((currentStep) => currentStep + 1);
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 animate-fadeIn">
       <div className="bg-[#FAF7F2] rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl border border-white/60 p-6 flex flex-col justify-between">
@@ -138,7 +149,7 @@ export const OnboardingModal: React.FC = () => {
                 />
               ))}
             </div>
-            {step > 1 && step < totalSteps ? (
+            {step > 1 && step < totalSteps && step !== 2 ? (
               <button
                 onClick={() => setStep((s) => s + 1)}
                 className="text-xs font-semibold text-slate-400 hover:text-slate-600"
@@ -153,9 +164,7 @@ export const OnboardingModal: React.FC = () => {
           {/* STEP 1: Welcome & Philosophy */}
           {step === 1 && (
             <div className="text-center py-2 animate-fadeIn">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-violet-500 to-rose-400 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-rose-200/50">
-                <Heart size={32} className="stroke-[2.2] animate-pulse" />
-              </div>
+              <MenseraLogo size={96} className="mx-auto mb-4 drop-shadow-md" />
               <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
                 Welcome to MENSERA
               </h2>
@@ -206,11 +215,17 @@ export const OnboardingModal: React.FC = () => {
                   <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (e.target.value.trim()) setNameError(false);
+                    }}
                     placeholder="e.g. Maya"
                     required
                     className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-violet-500"
                   />
+                  {nameError && (
+                    <p className="mt-1.5 text-xs font-semibold text-rose-700">Please enter your name to continue.</p>
+                  )}
                 </div>
 
                 <div>
@@ -397,7 +412,7 @@ export const OnboardingModal: React.FC = () => {
         <div className="pt-4 border-t border-slate-200/80 mt-4">
           {step < totalSteps ? (
             <button
-              onClick={() => setStep((s) => s + 1)}
+              onClick={handleContinue}
               className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-violet-600 to-rose-500 text-white font-bold text-sm shadow-md hover:shadow-lg flex items-center justify-center gap-2"
             >
               <span>Continue</span>

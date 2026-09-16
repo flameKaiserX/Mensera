@@ -8,6 +8,7 @@ export const AccountPanel: React.FC = () => {
     authLoading,
     authError,
     syncStatus,
+    userProfile,
     signIn,
     signUp,
     signInWithGoogle,
@@ -25,8 +26,8 @@ export const AccountPanel: React.FC = () => {
     setSubmitting(true);
     const error = mode === 'sign-in' ? await signIn(email, password) : await signUp(email, password);
     setSubmitting(false);
-    if (!error && mode === 'sign-up') {
-      setMessage('Account created. Check your email if verification is enabled.');
+    if (!error && mode === 'sign-up' && !authError) {
+      setMessage('Account created. Check your email to confirm it, then sign in here.');
     }
   };
 
@@ -53,9 +54,11 @@ export const AccountPanel: React.FC = () => {
       <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-emerald-100 text-emerald-700"><ShieldCheck size={17} /></div>
+            <div className="w-10 h-10 rounded-full bg-[#FBE0D8] border border-[#F3B8A8] text-[#B4232A] flex items-center justify-center text-base font-extrabold">
+              {(userProfile.name.trim() || 'Friend').charAt(0).toUpperCase()}
+            </div>
             <div>
-              <h3 className="text-sm font-extrabold text-slate-800">Cloud account</h3>
+              <h3 className="text-sm font-extrabold text-slate-800">{userProfile.name.trim() || 'Friend'}</h3>
               <p className="text-[11px] text-slate-500">{session.user.email}</p>
             </div>
           </div>
@@ -123,7 +126,7 @@ export const AccountPanel: React.FC = () => {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full py-2.5 px-3 rounded-xl bg-violet-700 hover:bg-violet-800 text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+          className="w-full py-2.5 px-3 rounded-xl bg-[#B4232A] hover:bg-[#8F1D25] text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
         >
           {mode === 'sign-in' ? <LogIn size={14} /> : <UserPlus size={14} />}
           {mode === 'sign-in' ? 'Sign in' : 'Create account'}
@@ -147,7 +150,7 @@ export const AccountPanel: React.FC = () => {
       <button
         type="button"
         onClick={() => setMode(mode === 'sign-in' ? 'sign-up' : 'sign-in')}
-        className="w-full text-[11px] font-semibold text-violet-700 hover:text-violet-900"
+        className="w-full text-[11px] font-semibold text-[#B4232A] hover:text-[#8F1D25]"
       >
         {mode === 'sign-in' ? 'Need an account? Create one' : 'Already have an account? Sign in'}
       </button>

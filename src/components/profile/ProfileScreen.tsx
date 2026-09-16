@@ -5,15 +5,12 @@ import {
   Download,
   Trash2,
   RefreshCw,
-  Bell,
   Lock,
-  ChevronRight,
   Save,
   Check,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import type { FitnessGoal } from '../../types';
-import { NotificationModal } from '../notifications/NotificationModal';
 import { AccountPanel } from './AccountPanel';
 
 export const ProfileScreen: React.FC = () => {
@@ -33,7 +30,6 @@ export const ProfileScreen: React.FC = () => {
   const [lastPeriodDate, setLastPeriodDate] = useState(userProfile.lastPeriodStartDate);
   const [isRegular, setIsRegular] = useState(userProfile.isRegular);
   const [fitnessGoal, setFitnessGoal] = useState<FitnessGoal>(userProfile.fitnessGoal);
-  const [showNotifModal, setShowNotifModal] = useState(false);
   const [savedSettings, setSavedSettings] = useState(false);
   const [showWipeConfirm, setShowWipeConfirm] = useState(false);
 
@@ -68,46 +64,6 @@ export const ProfileScreen: React.FC = () => {
   return (
     <div className="px-4 py-3 space-y-4 animate-fadeIn pb-8">
       <AccountPanel />
-
-      {/* Profile Header Card */}
-      <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs">
-        <div className="flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-violet-600 via-rose-500 to-amber-400 p-[2px] shadow-sm">
-            <div className="w-full h-full bg-[#FAF7F2] rounded-full flex items-center justify-center text-xl font-extrabold text-violet-700">
-              {name ? name[0].toUpperCase() : 'M'}
-            </div>
-          </div>
-          <div>
-            <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">
-              {name || 'Friend'}
-            </h2>
-            <p className="text-xs text-slate-500 font-medium capitalize">
-              Goal: {fitnessGoal.replace('-', ' ')} • {isRegular} cycle
-            </p>
-            <div className="mt-1 flex items-center gap-1 text-[11px] text-emerald-700 font-semibold">
-              <Lock size={11} className="text-emerald-600" />
-              <span>Private storage with optional cloud sync</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Notifications Shortcut */}
-        <div
-          onClick={() => setShowNotifModal(true)}
-          className="mt-2 p-3 rounded-2xl bg-violet-50/60 border border-violet-100 flex items-center justify-between cursor-pointer hover:border-violet-200 transition-all"
-        >
-          <div className="flex items-center gap-2">
-            <Bell size={18} className="text-violet-600" />
-            <div>
-              <h4 className="text-xs font-bold text-slate-800">Supportive Notifications</h4>
-              <p className="text-[11px] text-slate-500 font-medium">
-                Manage gentle period & workout reminders
-              </p>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-violet-600" />
-        </div>
-      </div>
 
       {/* Cycle Settings Form */}
       <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
@@ -335,8 +291,6 @@ export const ProfileScreen: React.FC = () => {
         </button>
       </div>
 
-      {/* Modals */}
-      {showNotifModal && <NotificationModal onClose={() => setShowNotifModal(false)} />}
     </div>
   );
 };

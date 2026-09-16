@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Check, LogIn, Mail, ShieldCheck, UserPlus } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { MenseraLogo } from '../common/MenseraLogo';
 
 export const AccountGate: React.FC = () => {
   const { signIn, signUp, signInWithGoogle, continueAsGuest, authError } = useApp();
@@ -16,8 +17,8 @@ export const AccountGate: React.FC = () => {
     setSubmitting(true);
     const error = mode === 'sign-in' ? await signIn(email, password) : await signUp(email, password);
     setSubmitting(false);
-    if (!error && mode === 'sign-up') {
-      setMessage('Account created. Check your email if verification is enabled.');
+    if (!error && mode === 'sign-up' && !authError) {
+      setMessage('Account created. Check your email to confirm it, then sign in here.');
     }
   };
 
@@ -32,13 +33,8 @@ export const AccountGate: React.FC = () => {
     <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
       <div className="bg-[#FAF7F2] rounded-3xl w-full max-w-md p-6 shadow-2xl border border-white/60">
         <div className="text-center mb-5">
-          <div className="mx-auto mb-3 w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-rose-500 text-white flex items-center justify-center shadow-lg">
-            <ShieldCheck size={24} />
-          </div>
-          <h2 className="text-xl font-extrabold text-slate-800">Welcome to Mensera</h2>
-          <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-            Create an account or sign in to keep your profile and cycle logs synced securely.
-          </p>
+          <MenseraLogo size={72} className="mx-auto mb-3" />
+          <h2 className="text-xl font-extrabold tracking-[0.18em] text-[#B4232A]">MENSERA</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-2.5">
@@ -76,7 +72,7 @@ export const AccountGate: React.FC = () => {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 px-3 rounded-xl bg-violet-700 hover:bg-violet-800 text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full py-3 px-3 rounded-xl bg-[#B4232A] hover:bg-[#8F1D25] text-white text-xs font-bold flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {mode === 'sign-in' ? <LogIn size={14} /> : <UserPlus size={14} />}
             {mode === 'sign-in' ? 'Sign in' : 'Create account'}
@@ -86,7 +82,7 @@ export const AccountGate: React.FC = () => {
         <button
           type="button"
           onClick={() => setMode(mode === 'sign-in' ? 'sign-up' : 'sign-in')}
-          className="w-full mt-2 text-[11px] font-semibold text-violet-700 hover:text-violet-900"
+          className="w-full mt-2 text-[11px] font-semibold text-[#B4232A] hover:text-[#8F1D25]"
         >
           {mode === 'sign-in' ? 'Need an account? Create one' : 'Already have an account? Sign in'}
         </button>
@@ -108,7 +104,7 @@ export const AccountGate: React.FC = () => {
         <button
           type="button"
           onClick={continueAsGuest}
-          className="w-full mt-4 py-2.5 px-3 rounded-xl text-slate-600 hover:text-slate-900 text-xs font-semibold flex items-center justify-center gap-2"
+          className="w-full mt-4 py-3 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-colors"
         >
           <Check size={14} /> Continue as guest
         </button>
