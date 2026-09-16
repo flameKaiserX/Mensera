@@ -203,14 +203,11 @@ export const OnboardingModal: React.FC = () => {
           {step === 2 && (
             <div className="py-2 animate-fadeIn">
               <h3 className="text-xl font-bold text-slate-800">What should we call you?</h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Use your first name or a nickname so your guidance feels personal.
-              </p>
 
               <div className="mt-6 space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                    Your Name / Nickname <span className="text-rose-500">*</span>
+                    Name /Nickname <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -219,7 +216,7 @@ export const OnboardingModal: React.FC = () => {
                       setName(e.target.value);
                       if (e.target.value.trim()) setNameError(false);
                     }}
-                    placeholder="e.g. Maya"
+                    placeholder="Akshara"
                     required
                     className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-violet-500"
                   />
@@ -236,7 +233,7 @@ export const OnboardingModal: React.FC = () => {
                     type="number"
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
-                    placeholder="e.g. 26"
+                    placeholder="21"
                     min={12}
                     max={65}
                     className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm focus:outline-hidden focus:ring-2 focus:ring-violet-500"
